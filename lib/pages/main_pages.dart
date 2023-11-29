@@ -1,97 +1,170 @@
+import 'dart:math';
+
 import 'package:calendar_appbar/calendar_appbar.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
+import 'package:finnote/model/database.dart';
 import 'package:finnote/pages/category_page.dart';
 import 'package:finnote/pages/home_page.dart';
 import 'package:finnote/pages/transaction_page.dart';
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:iconify_flutter/iconify_flutter.dart';
-import 'package:iconify_flutter/icons/material_symbols.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+  const MainPage({Key? key}) : super(key: key);
 
   @override
   State<MainPage> createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
-  final List<Widget> _children = [HomePage(), CategoryPage()];
-  int currentIndex = 0;
+  late DateTime selectedDate;
+  late List<Widget> _children;
+  late int currentIndex;
 
-  void onTapTapped(int index) {
+  final database = AppDb();
+
+  TextEditingController categoryNameController = TextEditingController();
+
+  @override
+  void initState() {
+    updateView(0, DateTime.now());
+
+    super.initState();
+  }
+
+  Future<List<Category>> getAllCategory() {
+    return database.select(database.categories).get();
+  }
+
+  void showAwe() async {
+    List<Category> al = await getAllCategory();
+    print('PANJANG : ' + al.length.toString());
+  }
+
+  void showSuccess(BuildContext context) {
+    // set up the button
+    Widget okButton = TextButton(
+      child: Text("OK"),
+      onPressed: () {},
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("My title"),
+      content: Text("This is my message."),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  void updateView(int index, DateTime? date) {
     setState(() {
+      if (date != null) {
+        selectedDate = DateTime.parse(DateFormat('yyyy-MM-dd').format(date));
+      }
+
       currentIndex = index;
+      _children = [
+        HomePage(
+          selectedDate: selectedDate,
+        ),
+        CategoryPage()
+      ];
+    });
+  }
+
+  void onTabTapped(int index) {
+    setState(() {
+      selectedDate =
+          DateTime.parse(DateFormat('yyyy-MM-dd').format(DateTime.now()));
+      currentIndex = index;
+      _children = [
+        HomePage(
+          selectedDate: selectedDate,
+        ),
+        CategoryPage()
+      ];
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: (currentIndex == 0)
-          ? CalendarAppBar(
-              backButton: false,
-              accent: Colors.blue,
-              locale: 'id',
-              onDateChanged: (value) => print(value),
-              firstDate: DateTime.now().subtract(Duration(days: 140)),
-              lastDate: DateTime.now(),
-            )
-          : PreferredSize(
-              preferredSize: Size.fromHeight(100),
-              child: Container(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 50, horizontal: 16),
-                  child: Text(
-                    'Kategori',
-                    style: GoogleFonts.poppins(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              )),
-      floatingActionButton: Visibility(
-        visible: (currentIndex == 0) ? true : false,
-        child: FloatingActionButton(
-          onPressed: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(
-              builder: (context) => TransactionPage(),
-            ))
-                .then((value) {
-              setState(() {});
-            });
-          },
-          backgroundColor: Colors.blue,
-          child: Icon(Icons.add),
+        floatingActionButton: Visibility(
+          visible: (currentIndex == 0) ? true : false,
+          child: FloatingActionButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(
+                  builder: (context) =>
+                      TransactionPage(transactionsWithCategory: null),
+                ))
+                    .then((value) {
+                  setState(() {
+                    updateView(0, DateTime.now());
+                  });
+                });
+              },
+              backgroundColor: Colors.lightBlue,
+              child: Icon(Icons.add)),
         ),
-      ),
-      body: _children[currentIndex],
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBar(
-        child: Row(
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: BottomAppBar(
+            child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             IconButton(
                 onPressed: () {
-                  onTapTapped(0);
+                  updateView(0, DateTime.now());
                 },
-                icon: Iconify(MaterialSymbols.home, color: Colors.grey)),
+                icon: Icon(Icons.home)),
             SizedBox(
-              width: 30,
+              width: 20,
             ),
             IconButton(
                 onPressed: () {
-                  onTapTapped(1);
+                  updateView(1, DateTime.now());
                 },
-                icon: Iconify(
-                  MaterialSymbols.list_alt,
-                  color: Colors.grey,
-                ))
+                icon: Icon(Icons.list))
           ],
-        ),
-      ),
-    );
+        )),
+        body: _children[currentIndex],
+        appBar: (currentIndex == 1)
+            ? PreferredSize(
+                preferredSize: const Size.fromHeight(100),
+                child: Container(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 36, horizontal: 16),
+                    child: Text(
+                      "Kategori",
+                      style: GoogleFonts.montserrat(fontSize: 20),
+                    ),
+                  ),
+                ),
+              )
+            : CalendarAppBar(
+                fullCalendar: true,
+                backButton: false,
+                accent: Colors.lightBlue,
+                locale: 'en',
+                onDateChanged: (value) {
+                  setState(() {
+                    selectedDate = value;
+                    updateView(0, selectedDate);
+                  });
+                },
+                lastDate: DateTime.now()));
   }
 }
