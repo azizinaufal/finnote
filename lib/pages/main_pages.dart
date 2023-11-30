@@ -10,6 +10,8 @@ import 'package:finnote/model/database.dart';
 import 'package:finnote/pages/category_page.dart';
 import 'package:finnote/pages/home_page.dart';
 import 'package:finnote/pages/transaction_page.dart';
+import 'package:iconify_flutter/iconify_flutter.dart';
+import 'package:iconify_flutter/icons/material_symbols.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -128,7 +130,7 @@ class _MainPageState extends State<MainPage> {
                 onPressed: () {
                   updateView(0, DateTime.now());
                 },
-                icon: Icon(Icons.home)),
+                icon: Iconify(MaterialSymbols.home, color: Colors.grey)),
             SizedBox(
               width: 20,
             ),
@@ -136,7 +138,10 @@ class _MainPageState extends State<MainPage> {
                 onPressed: () {
                   updateView(1, DateTime.now());
                 },
-                icon: Icon(Icons.list))
+                icon: Iconify(
+                  MaterialSymbols.list_alt,
+                  color: Colors.grey,
+                ))
           ],
         )),
         body: _children[currentIndex],

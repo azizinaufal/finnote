@@ -10,6 +10,8 @@ import 'package:finnote/model/transaction_wirh_category.dart';
 import 'package:finnote/pages/category_page.dart';
 import 'package:finnote/model/database.dart';
 import 'package:finnote/pages/transaction_page.dart';
+import 'package:iconify_flutter/iconify_flutter.dart';
+import 'package:iconify_flutter/icons/material_symbols.dart';
 
 class HomePage extends StatefulWidget {
   final DateTime selectedDate;
@@ -44,7 +46,7 @@ class _HomePageState extends State<HomePage> {
                   width: double.infinity,
                   padding: EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                      color: Colors.grey[800],
+                      color: Colors.blue,
                       borderRadius: BorderRadius.circular(16)),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -59,9 +61,9 @@ class _HomePageState extends State<HomePage> {
                                   decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(8)),
-                                  child: Icon(
-                                    Icons.download,
-                                    color: Colors.greenAccent[400],
+                                  child: Iconify(
+                                    MaterialSymbols.download,
+                                    color: Colors.blue,
                                   )),
                               SizedBox(
                                 width: 10,
@@ -69,14 +71,14 @@ class _HomePageState extends State<HomePage> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Income',
-                                      style: GoogleFonts.montserrat(
+                                  Text('Pemasukan',
+                                      style: GoogleFonts.poppins(
                                           fontSize: 12, color: Colors.white)),
                                   SizedBox(
                                     height: 5,
                                   ),
                                   Text('Rp 3.800.000',
-                                      style: GoogleFonts.montserrat(
+                                      style: GoogleFonts.poppins(
                                           fontSize: 14, color: Colors.white)),
                                 ],
                               ),
@@ -89,8 +91,8 @@ class _HomePageState extends State<HomePage> {
                                   decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(8)),
-                                  child: Icon(
-                                    Icons.upload,
+                                  child: Iconify(
+                                    MaterialSymbols.upload,
                                     color: Colors.redAccent[400],
                                   )),
                               SizedBox(
@@ -99,14 +101,14 @@ class _HomePageState extends State<HomePage> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Expense',
-                                      style: GoogleFonts.montserrat(
+                                  Text('Pengeluaran',
+                                      style: GoogleFonts.poppins(
                                           fontSize: 12, color: Colors.white)),
                                   SizedBox(
                                     height: 5,
                                   ),
                                   Text('Rp 1.600.000',
-                                      style: GoogleFonts.montserrat(
+                                      style: GoogleFonts.poppins(
                                           fontSize: 14, color: Colors.white)),
                                 ],
                               ),
@@ -123,8 +125,8 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Text(
-                "Transactions",
-                style: GoogleFonts.montserrat(
+                "Transaksi",
+                style: GoogleFonts.poppins(
                     fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
@@ -147,25 +149,19 @@ class _HomePageState extends State<HomePage> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 16),
                                 child: Card(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadiusDirectional.circular(15)),
                                   elevation: 10,
                                   child: ListTile(
                                     trailing: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         IconButton(
-                                            icon: Icon(Icons.delete),
-                                            onPressed: () async {
-                                              await database
-                                                  .deleteTransactionRepo(
-                                                      snapshot.data![index]
-                                                          .transaction.id);
-                                              setState(() {});
-                                            }),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        IconButton(
-                                          icon: Icon(Icons.edit),
+                                          icon: Iconify(
+                                            MaterialSymbols.edit,
+                                            color: Colors.yellow[600],
+                                          ),
                                           onPressed: () {
                                             Navigator.of(context)
                                                 .push(MaterialPageRoute(
@@ -177,7 +173,22 @@ class _HomePageState extends State<HomePage> {
                                                 ))
                                                 .then((value) {});
                                           },
-                                        )
+                                        ),
+                                        SizedBox(
+                                          width: 8,
+                                        ),
+                                        IconButton(
+                                            icon: Iconify(
+                                              MaterialSymbols.delete,
+                                              color: Colors.red,
+                                            ),
+                                            onPressed: () async {
+                                              await database
+                                                  .deleteTransactionRepo(
+                                                      snapshot.data![index]
+                                                          .transaction.id);
+                                              setState(() {});
+                                            }),
                                       ],
                                     ),
                                     subtitle: Text(
@@ -191,13 +202,13 @@ class _HomePageState extends State<HomePage> {
                                         child: (snapshot.data![index].category
                                                     .type ==
                                                 1)
-                                            ? Icon(
-                                                Icons.download,
-                                                color: Colors.greenAccent[400],
+                                            ? Iconify(
+                                                MaterialSymbols.download,
+                                                color: Colors.blue,
                                               )
-                                            : Icon(
-                                                Icons.upload,
-                                                color: Colors.red[400],
+                                            : Iconify(
+                                                MaterialSymbols.upload,
+                                                color: Colors.red,
                                               )),
                                     title: Text(
                                       snapshot.data![index].transaction.amount
@@ -214,7 +225,7 @@ class _HomePageState extends State<HomePage> {
                               height: 30,
                             ),
                             Text("Belum ada transaksi",
-                                style: GoogleFonts.montserrat()),
+                                style: GoogleFonts.poppins()),
                           ]),
                         );
                       }

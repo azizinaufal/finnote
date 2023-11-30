@@ -3,6 +3,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:finnote/model/cateogory.dart';
 import 'package:finnote/model/database.dart';
+import 'package:iconify_flutter/iconify_flutter.dart';
+import 'package:iconify_flutter/icons/material_symbols.dart';
 
 class CategoryPage extends StatefulWidget {
   const CategoryPage({Key? key}) : super(key: key);
@@ -58,7 +60,7 @@ class _CategoryPageState extends State<CategoryPage> {
                 Text(
                   ((category != null) ? 'Edit ' : 'Add ') +
                       ((isExpense!) ? "Outcome" : "Income"),
-                  style: GoogleFonts.montserrat(
+                  style: GoogleFonts.poppins(
                       fontSize: 18,
                       color: (isExpense!) ? Colors.lightBlue : Colors.black),
                 ),
@@ -117,7 +119,7 @@ class _CategoryPageState extends State<CategoryPage> {
                     },
                   ),
                   Text(
-                    isExpense! ? "Expense" : "Income",
+                    isExpense! ? "Pengeluaran" : "Pemasukan",
                     style: GoogleFonts.montserrat(fontSize: 14),
                   )
                 ],
@@ -147,13 +149,19 @@ class _CategoryPageState extends State<CategoryPage> {
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadiusDirectional.circular(15)),
                           elevation: 10,
                           child: ListTile(
                               trailing: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   IconButton(
-                                    icon: Icon(Icons.delete),
+                                    icon: Iconify(
+                                      MaterialSymbols.delete,
+                                      color: Colors.red,
+                                    ),
                                     onPressed: () {
                                       database.deleteCategoryRepo(
                                           snapshot.data![index].id);
@@ -164,7 +172,10 @@ class _CategoryPageState extends State<CategoryPage> {
                                     width: 10,
                                   ),
                                   IconButton(
-                                    icon: Icon(Icons.edit),
+                                    icon: Iconify(
+                                      MaterialSymbols.edit,
+                                      color: Colors.yellow[600],
+                                    ),
                                     onPressed: () {
                                       openDialog(snapshot.data![index]);
                                     },
@@ -177,11 +188,11 @@ class _CategoryPageState extends State<CategoryPage> {
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(8)),
                                   child: (isExpense!)
-                                      ? Icon(Icons.upload,
-                                          color: Colors.lightBlue[400])
-                                      : Icon(
-                                          Icons.download,
-                                          color: Colors.black,
+                                      ? Iconify(MaterialSymbols.upload,
+                                          color: Colors.red)
+                                      : Iconify(
+                                          MaterialSymbols.download,
+                                          color: Colors.blue,
                                         )),
                               title: Text(snapshot.data![index].name)),
                         ),

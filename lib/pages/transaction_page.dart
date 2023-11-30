@@ -100,7 +100,7 @@ class _TransactionPageState extends State<TransactionPage> {
                   },
                 ),
                 Text(
-                  isExpense ? "Expense" : "Income",
+                  isExpense ? "Pengeluaran" : "Pemasukan",
                   style: GoogleFonts.montserrat(fontSize: 14),
                 )
               ],
@@ -112,7 +112,7 @@ class _TransactionPageState extends State<TransactionPage> {
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
                   border: UnderlineInputBorder(),
-                  labelText: 'Amount',
+                  labelText: 'Jumlah',
                 ),
               ),
             ),
@@ -121,7 +121,7 @@ class _TransactionPageState extends State<TransactionPage> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text("Category", style: GoogleFonts.montserrat()),
+              child: Text("Kategori", style: GoogleFonts.poppins()),
             ),
             SizedBox(
               height: 5,
@@ -168,7 +168,7 @@ class _TransactionPageState extends State<TransactionPage> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: TextFormField(
                 controller: dateController,
-                decoration: const InputDecoration(labelText: "Enter Date"),
+                decoration: const InputDecoration(labelText: "Tanggal"),
                 readOnly: true,
                 onTap: () async {
                   DateTime? pickedDate = await showDatePicker(
@@ -203,7 +203,7 @@ class _TransactionPageState extends State<TransactionPage> {
                 controller: descriptionController,
                 decoration: const InputDecoration(
                   border: UnderlineInputBorder(),
-                  labelText: 'Description',
+                  labelText: 'Deskripsi',
                 ),
               ),
             ),
@@ -212,12 +212,19 @@ class _TransactionPageState extends State<TransactionPage> {
             ),
             Center(
                 child: ElevatedButton(
-                    onPressed: () {
-                      insert(
-                          descriptionController.text,
-                          selectedCategory!.id,
-                          int.parse(amountController.text),
-                          DateTime.parse(dateController.text));
+                    onPressed: () async {
+                      (widget.transactionsWithCategory == null)
+                          ? insert(
+                              descriptionController.text,
+                              selectedCategory!.id,
+                              int.parse(amountController.text),
+                              DateTime.parse(dateController.text))
+                          : await update(
+                              widget.transactionsWithCategory!.transaction.id,
+                              int.parse(amountController.text),
+                              selectedCategory!.id,
+                              DateTime.parse(dateController.text),
+                              descriptionController.text);
                       Navigator.pop(context, true);
                     },
                     child: Text('Save')))
