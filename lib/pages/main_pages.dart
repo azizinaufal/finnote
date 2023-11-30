@@ -151,10 +151,11 @@ class _MainPageState extends State<MainPage> {
                 child: Container(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 36, horizontal: 16),
+                        vertical: 50, horizontal: 16),
                     child: Text(
                       "Kategori",
-                      style: GoogleFonts.montserrat(fontSize: 20),
+                      style: GoogleFonts.poppins(
+                          fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
@@ -163,7 +164,7 @@ class _MainPageState extends State<MainPage> {
                 fullCalendar: true,
                 backButton: false,
                 accent: Colors.lightBlue,
-                locale: 'en',
+                locale: 'id',
                 onDateChanged: (value) {
                   setState(() {
                     selectedDate = value;

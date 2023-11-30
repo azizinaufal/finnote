@@ -107,8 +107,8 @@ class _CategoryPageState extends State<CategoryPage> {
                   Switch(
                     // This bool value toggles the switch.
                     value: isExpense!,
-                    inactiveTrackColor: Colors.green[200],
-                    inactiveThumbColor: Colors.green,
+                    inactiveTrackColor: Colors.blue[400],
+                    inactiveThumbColor: Colors.blue,
                     activeColor: Colors.red,
                     onChanged: (bool value) {
                       // This is called when the user toggles the switch.

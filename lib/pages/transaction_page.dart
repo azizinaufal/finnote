@@ -77,7 +77,7 @@ class _TransactionPageState extends State<TransactionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Add Transacrtion")),
+      appBar: AppBar(title: Text("Tambah Transaksi")),
       body: SingleChildScrollView(
         child: SafeArea(
             child: Column(
@@ -88,8 +88,8 @@ class _TransactionPageState extends State<TransactionPage> {
                 Switch(
                   // This bool value toggles the switch.
                   value: isExpense,
-                  inactiveTrackColor: Colors.green[200],
-                  inactiveThumbColor: Colors.green,
+                  inactiveTrackColor: Colors.blue[400],
+                  inactiveThumbColor: Colors.blue,
                   activeColor: Colors.red,
                   onChanged: (bool value) {
                     setState(() {
@@ -101,7 +101,7 @@ class _TransactionPageState extends State<TransactionPage> {
                 ),
                 Text(
                   isExpense ? "Pengeluaran" : "Pemasukan",
-                  style: GoogleFonts.montserrat(fontSize: 14),
+                  style: GoogleFonts.poppins(fontSize: 14),
                 )
               ],
             ),
